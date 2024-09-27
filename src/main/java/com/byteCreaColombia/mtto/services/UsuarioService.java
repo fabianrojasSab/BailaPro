@@ -6,6 +6,10 @@ import javax.persistence.Persistence;
 
 import com.byteCreaColombia.mtto.entities.Usuario;
 
+/*hace referencia a una clase de servicio que contiene la lógica de negocio 
+relacionada con un dominio específico. En este caso, UsuarioService se 
+encargaría de manejar las operaciones relacionadas con el objeto o entidad Usuario.*/
+
 public class UsuarioService extends BaseService {
 
     public UsuarioService() {

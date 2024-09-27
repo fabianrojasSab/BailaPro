@@ -7,6 +7,12 @@ import javax.faces.context.FacesContext;
 import com.byteCreaColombia.mtto.entities.Usuario;
 import com.byteCreaColombia.mtto.services.UsuarioService;
 
+
+//Clase creada para contener las funciones de autenticacion
+/*El término "Bean" se usa porque estos objetos tienen las características
+como(encapsulación de datos a través de getters y setters, 
+constructor sin parámetros, y potencialmente serializables)*/
+
 @ManagedBean(name = "authBean")
 public class AuthBean {
 
