@@ -1,0 +1,48 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+
+	<persistence-unit name="persistencia" transaction-type="RESOURCE_LOCAL">
+		<description>BailaPro</description>
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		
+
+
+		<properties>
+		<!--
+		 	<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://btlm6nc5yjsorbjalmk9-mysql.services.clever-cloud.com:3306/btlm6nc5yjsorbjalmk9?useSSL=false&amp;serverTimezone=UTC" />
+            <property name="javax.persistence.jdbc.user" value="ursciyc3atwfvjux" />
+            <property name="javax.persistence.jdbc.password" value="djmrDRKWwKxDDIYWAaoG" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
+			
+			 https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api 
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://budbqzaaix5g46bqxtkm-postgresql.services.clever-cloud.com:50013/budbqzaaix5g46bqxtkm?useSSL=false&amp;serverTimezone=UTC" />
+			<property name="javax.persistence.jdbc.user" value="ux8r9bvemd5egkbvkthl" />
+			<property name="javax.persistence.jdbc.password" value="UY3NW2Qqjvs7i2xmZihnTaNoiRkq7H" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			-->
+			
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres" />
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.password" value="admin" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			
+            <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JDBCTransactionFactory" />
+        	<property name="hibernate.current_session_context_class" value="thread" />
+	        <property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="true" />
+			<property name="hibernate.generate_statistics" value="true" />
+			<property name="hibernate.type" value="TRACE" />
+			<property name="org.hibernate.SQL" value="DEBUG" />
+        
+			<property name="hibernate.hbm2ddl.auto" value="update" /> 
+		</properties>
+	</persistence-unit>
+
+</persistence>
