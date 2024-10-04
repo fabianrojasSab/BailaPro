@@ -40,6 +40,7 @@ public class Estudiante implements Serializable {
 	private LocalDateTime fecha_registro;	
 	
 	
+
 	public long getId() {
 		return id;
 	}

@@ -11,7 +11,7 @@
       
 <h:head>
 
-    <title>MESA DE AYUDA</title>
+    <title>BailaPro</title>
     
     <!-- Hoja de estilos CSS  
    	<link href="estilos/main.css" rel="stylesheet"/>
@@ -33,10 +33,148 @@
 
 <h:body>
 	<div class="container-fluid">
-	<!-- *************************** Formlario para el inicio de sesion **************************************  -->
+	<!-- *************************** INICIO navbar **************************************  -->
+	<div class="card">
+	    <h:form>
+	
+	        <p:menubar>
+	        
+	        <p:menuitem value="Bienvenido, #{usuarioSesion.nombreUsuario != null ? usuarioSesion.nombreUsuario : 'Usuario Desconocido'}" icon="pi pi-fw pi-user"/>
+	        <p:divider layout="vertical"/>            
+				
+				<p:submenu label="Editar" icon="pi pi-fw pi-pencil">
+	                <p:menuitem value="Estudiantes" icon="pi pi-fw pi-align-left" action="assets/estudiantes.xhtml"/>
+	                
+	                <p:menuitem value="Clientes" icon="pi pi-fw pi-align-right" action="assets/clientes.xhtml"/>
+	                <p:menuitem value="Vuelos" icon="pi pi-fw pi-align-center" action="assets/vuelos.xhtml"/>
+	                <p:menuitem value="Categorias" icon="pi pi-fw pi-align-justify" action="assets/clasesVuelos.xhtml"/>
+	                <p:menuitem value="Asientos" icon="pi pi-fw pi-align-justify" action="assets/asientos.xhtml"/>
+	                <p:menuitem value="Boletos" icon="pi pi-fw pi-align-justify" action="assets/boletos.xhtml"/>
+	            </p:submenu>
+	            
+	            <p:submenu label="Editar" icon="pi pi-fw pi-pencil">
+	                <p:menuitem value="Mis datos" icon="pi pi-fw pi-align-right" action="assets/clientes.xhtml"/>
+	                <p:menuitem value="Mis vuelos" icon="pi pi-fw pi-align-center" action="assets/vuelos.xhtml"/>
+	            </p:submenu>
+	
+	            <p:divider layout="vertical"/>
+	
+
+	            <f:facet name="options">
+	                <div class="ui-input-icon-left mr-2">
+	                    <i class="pi pi-fw pi-search" />
+	                    <p:inputText placeholder="Search"/>
+	                </div>
+	                	<p:commandButton value="Cerrar Sesion" action="#{clienteBean.logout}" />
+	            </f:facet>
+	        </p:menubar>
+	    </h:form>
+	</div>
+	<!-- *************************** FIN navbar **************************************  -->
+	<p:outputPanel id="clientesPanel">
+		<div class="card crud-demo">
+			<h:form id="form">
+				<p:growl id="messages" showDetail="true" />
+		        
 
 		
-		<!--  *************************** Formlario para ir a la página de regis **************************************  -->
+		        <p:dataTable id="dt-products" widgetVar="dtProducts" var="vueloDto" value="#{vueloBean.allVuelos}"
+		            reflow="true" styleClass="products-table" selection="#{vueloBean.selectedVuelos}"
+		            rowKey="#{vueloDto.idVuelo}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+		            <f:facet name="header">
+		                <div class="products-table-header">
+		                    <span style="font-weight: bold">Vuelo </span>
+		                    <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+		                        <p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Search" />
+		                    </span>
+		                </div>
+		            </f:facet>
+		
+		            <p:column headerText="CIUDAD ORIGEN" sortBy="#{vueloDto.ciudadOrigen}" filterBy="#{vueloDto.ciudadOrigen}">
+		                <h:outputText value="#{vueloDto.ciudadOrigen}" />
+		            </p:column>
+		            <p:column headerText="CIUDAD DESTINO" sortBy="#{vueloDto.ciudadDestino}" filterBy="#{vueloDto.ciudadDestino}">
+		                <h:outputText value="#{vueloDto.ciudadDestino}" />
+		            </p:column>
+		            <p:column headerText="PRECIO" sortBy="#{vueloDto.precio}"  filterBy="#{vueloDto.precio}">
+		                <h:outputText value="#{vueloDto.precio}" />
+		            </p:column>
+		            <p:column headerText="HORA" sortBy="#{vueloDto.hora}" filterBy="#{vueloDto.hora}">
+		                <h:outputText value="#{vueloDto.hora}" />
+		            </p:column>
+		            <p:column headerText="AVION" sortBy="#{vueloDto.idAvion}" filterBy="#{vueloDto.idAvion}">
+		                <h:outputText value="#{vueloDto.idAvion.placa}" />
+		            </p:column>
+		            <p:column exportable="false">
+		                <p:commandButton icon="pi pi-shopping-bag" update=":dialogs:manage-product-content"
+		                    oncomplete="PF('manageProductDialog').show()"
+		                    styleClass="edit-button rounded-button ui-button-success" process="@this">
+		                    <f:setPropertyActionListener value="#{vueloDto}" target="#{vueloBean.selectedVuelo}" />
+		                    <p:resetInput target=":dialogs:manage-product-content" />
+		                </p:commandButton>
+		            </p:column>
+		
+		        </p:dataTable>
+		    </h:form>
+	
+			<h:form id="dialogs">
+		        <p:dialog header="Detalles de vuelos" showEffect="fade" modal="true" widgetVar="manageProductDialog"
+		            responsive="true">
+		            <p:outputPanel id="manage-product-content" class="ui-fluid">
+		                <p:outputPanel rendered="#{not empty vueloBean.selectedVuelo}">
+		                
+		                	<div class="field">
+		                		<h:outputLabel for="idVuelo" value="ID vuelo:"/>
+		                		<p:inputText id="idVuelo" value="#{vueloBean.selectedVuelo.idVuelo}" required="true" />
+		                    </div>
+          		          	<div class="field">
+		                        <h:outputLabel for="ciudadOrigen" value="Ciudad Origen:"/>
+		                		<p:inputText id="ciudadOrigen" value="#{vueloBean.selectedVuelo.ciudadOrigen}" required="true" />
+		                    </div>
+   		                	<div class="field">
+		                        <h:outputLabel for="ciudadDestino" value="Ciudad Destino:"/>
+		                		<p:inputText id="ciudadDestino" value="#{vueloBean.selectedVuelo.ciudadDestino}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="precio" value="Precio:"/>
+		                		<p:inputText id="precio" value="#{vueloBean.selectedVuelo.precio}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="hora" value="Hora:"/>
+		                		<p:inputText id="hora" value="#{vueloBean.selectedVuelo.hora}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="idAsiento" value="Asiento:"/>
+		                		<p:selectOneMenu id="idAsiento" value="#{asientoBean.idClase}">
+		                			<f:selectItem itemLabel="Seleccione una asiento" itemValue=""/>
+								    <f:selectItems value="#{asientoBean.asientoByAvion(vueloBean.selectedVuelo.idVuelo)}" var="asientoDto" itemLabel="#{asientoDto.letraAsiento}#{asientoDto.numeroFila}" itemValue="#{asientoDto.idAsiento}" />
+								</p:selectOneMenu>
+		                    </div>	
+		                </p:outputPanel>
+		            </p:outputPanel>
+		
+		            <f:facet name="footer">
+		                <p:commandButton value="Save" icon="pi pi-check" actionListener="#{vueloBean.update}"
+		                    update="manage-product-content" process="manage-product-content @this" />
+		                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+		                    class="ui-button-secondary" type="button" />
+		            </f:facet>
+		        </p:dialog>
+		
+	
+		        <p:confirmDialog global="true" showEffect="fade" width="300">
+		            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+		            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+		                icon="pi pi-times" />
+		        </p:confirmDialog>
+			</h:form>
+
+		</div>
+	
+	</p:outputPanel>
+	
+	
+	
 	</div>
 </h:body>
 

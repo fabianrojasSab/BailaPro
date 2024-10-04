@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+<h:head>
+
+    <title>BailaPro</title>
+    
+    <!-- Hoja de estilos CSS  -->
+   	<h:outputStylesheet library="css" name="paginaPrincipal.css" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
+	<!-- Hoja de estilos CSS  -->
+	
+   	 <!-- Hoja de estilos CSS  -->
+   	<link rel="icon" href="favicon.ico" type="image/x-icon"></link>
+   	
+   	<meta charset="UTF-8"/>
+   	
+   	<!--  Etiquetas para que no cargue caché en navegador  -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"></meta>
+    <meta http-equiv="Pragma" content="no-cache"></meta>
+    <meta http-equiv="Expires" content="0"></meta>
+     <!-- Etiquetas para que no cargue caché en navegador  -->
+
+</h:head>
+
+<h:body>
+	<div class="container-fluid">
+	<!-- *************************** INICIO navbar **************************************  -->
+	<div class="card">
+	    <h:form>
+	        <p:menubar>
+	        <p:menuitem value="Bienvenido, #{usuarioSesion.nombreUsuario != null ? usuarioSesion.nombreUsuario : 'Usuario Desconocido'}" icon="pi pi-fw pi-user"/>
+	        	<p:divider layout="vertical"/>
+	            <f:facet name="options">
+	                <p:commandButton value="Volver"  action="/paginaPrincipal.xhtml" />
+	            </f:facet>
+	        </p:menubar>
+	    </h:form>
+	</div>
+	<!-- *************************** FIN navbar **************************************  -->
+	
+	<p:outputPanel id="estudiantesPanel">
+		<div class="card crud-demo">
+			<h:form id="form">
+				<p:growl id="messages" showDetail="true" />
+		        <!-- *************************** botones nuevo y eliminar **************************************  -->
+		        <p:toolbar>
+		            <p:toolbarGroup>
+		                <p:commandButton value="New" icon="pi pi-plus" actionListener="#{clienteBean.openNew}"
+		                    update=":dialogNew:new-estudiante-content" oncomplete="PF('newEstudianteDialog').show()"
+		                    styleClass="ui-button-success" style="margin-right: .5rem">
+		                    <p:resetInput target=":dialogs:manage-estudiante-content" />
+		                </p:commandButton>
+		                <p:commandButton id="delete-products-button" value="#{crudView.deleteButtonMessage}"
+		                    icon="pi pi-trash" actionListener="#{crudView.deleteSelectedProducts}"
+		                    styleClass="ui-button-danger" disabled="#{!crudView.hasSelectedProducts()}" update="@this">
+		                    <p:confirm header="Confirmation" message="Delete the selected products?"
+		                        icon="pi pi-exclamation-triangle" />
+		                </p:commandButton>
+		            </p:toolbarGroup>
+		        </p:toolbar>
+				
+				
+				<p:dataTable id="dt-products" widgetVar="dtProducts" var="estudiante" value="#{estudianteBean.allEstudiantes}"
+		            reflow="true" styleClass="products-table" selection=""
+		            rowKey="#{estudiante.id}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+		            
+		            <f:facet name="header">
+		                <div class="products-table-header">
+		                    <span style="font-weight: bold">Estudiante</span>
+		                    <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+		                        <p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Search" />
+		                    </span>
+		                </div>
+		            </f:facet>
+		
+		            <p:ajax event="rowSelect" update=":form:delete-products-button" />
+		            <p:ajax event="rowUnselect" update=":form:delete-products-button" />
+		            <p:ajax event="rowSelectCheckbox" update=":form:delete-products-button" />
+		            <p:ajax event="rowUnselectCheckbox" update=":form:delete-products-button" />
+		            <p:ajax event="toggleSelect" update=":form:delete-products-button" />
+		
+		            <p:column selectionMode="multiple" exportable="false"></p:column>
+		
+
+		            <p:column headerText="NOMBRES" sortBy="#{estudiante.nombre}" filterBy="#{estudiante.nombre}">
+		                <h:outputText value="#{estudiante.nombre}" />
+		            </p:column>
+		            <p:column headerText="CORREO" sortBy="#{estudiante.email}" filterBy="#{estudiante.email}">
+		                <h:outputText value="#{estudiante.email}" />
+		            </p:column>
+		            <p:column headerText="TELEFONO" sortBy="#{estudiante.telefono}" filterBy="#{estudiante.telefono}">
+		                <h:outputText value="#{estudiante.telefono}" />
+		            </p:column>
+		            <p:column headerText="FECHA NACIMIENTO" sortBy="#{estudiante.fecha_nacimiento}" filterBy="#{estudiante.fecha_nacimiento}">
+		                <h:outputText value="#{estudiante.fecha_nacimiento}" />
+		            </p:column>
+		            <p:column headerText="FECHA REGISTRO" sortBy="#{estudiante.fecha_registro}" filterBy="#{estudiante.fecha_registro}">
+		                <h:outputText value="#{estudiante.fecha_registro}" />
+		            </p:column>	
+		            
+           		    <p:column exportable="false">
+		                <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-estudiante-content"
+		                    oncomplete="PF('manageEstudiantetDialog').show()"
+		                    styleClass="edit-button rounded-button ui-button-success" process="@this">
+		                    <f:setPropertyActionListener value="#{estudiante}" target="" />
+		                    <p:resetInput target=":dialogs:manage-estudiante-content" />
+		                </p:commandButton>
+		                <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+		                                 process="@this"
+		                                 oncomplete="PF('deleteEstudianteDialog').show()">
+		                    <f:setPropertyActionListener value="#{estudiante}" target="" />
+		                </p:commandButton>
+		            </p:column>
+		        </p:dataTable>
+
+		    </h:form>
+		    <!-- *************************** INICIO botones de confirmar **************************************  
+		    <p:confirmDialog widgetVar="deleteEstudianteDialog" showEffect="fade" width="300"
+	            message="Delete the product?" header="Confirm" severity="warn">
+	            <p:commandButton value="Yes" icon="pi pi-check" actionListener=""
+	                process="@this" update=":form:delete-products-button"
+	                oncomplete="PF('deleteEstudianteDialog').hide()" />
+	            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+	                onclick="PF('deleteEstudianteDialog').hide()" />
+	        </p:confirmDialog>
+	
+	        <p:confirmDialog global="true" showEffect="fade" width="300">
+	            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+	            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+	                icon="pi pi-times" />
+	        </p:confirmDialog>
+	        *************************** FIN botones de confirmar **************************************  -
+		    
+			 *************************** INICIO editar estudiante **************************************  
+			<h:form id="dialogs">
+		        <p:dialog header="Detalles de estudiante" showEffect="fade" modal="true" widgetVar="manageEstudiantetDialog"
+		            responsive="true">
+		            <p:outputPanel id="manage-estudiante-content" class="ui-fluid">
+		                <p:outputPanel rendered="#{not empty clienteBean.selectedCliente}">
+		                
+          		          	<div class="field">
+		                        <h:outputLabel for="nombres" value="Nombres:"/>
+		                		<p:inputText id="nombres" value="#{clienteBean.selectedCliente.nombres}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="apellidos" value="Apellidos:"/>
+		                		<p:inputText id="apellidos" value="#{clienteBean.selectedCliente.apellidos}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="correo" value="Correo:"/>
+		                		<p:inputText id="correo" value="#{clienteBean.selectedCliente.correo}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="edad" value="Edad:"/>
+		                		<p:inputText id="edad" value="#{clienteBean.selectedCliente.edad}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="estado" value="Estado"/>
+		                		<p:inputText id="estado" value="#{clienteBean.selectedCliente.estado}" required="true" />
+		                    </div>	
+	
+		                </p:outputPanel>
+		            </p:outputPanel>
+		
+		            <f:facet name="footer">
+		                <p:commandButton value="Save" icon="pi pi-check" actionListener="#{clienteBean.update}"
+		                    update="manage-estudiante-content" process="manage-estudiante-content @this" />
+		                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+		                    class="ui-button-secondary" type="button" />
+		            </f:facet>
+		        </p:dialog>
+			</h:form>
+			 *************************** FIN editar estudiante **************************************  -->
+	
+			<!-- *************************** INICIO nuevo estudiante **************************************  -->
+			<h:form id="dialogNew">
+				<p:dialog header="Nuevo estudiante" showEffect="fade" modal="true" widgetVar="newEstudianteDialog"
+			            responsive="true">
+			            <p:outputPanel id="new-estudiante-content" class="ui-fluid">
+			                <p:outputPanel>
+		
+          		          	<div class="field">
+		                        <h:outputLabel for="nombres" value="Nombre completo:"/>
+		                		<p:inputText id="nombres" value="#{estudianteBean.nombre}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="telefono" value="Telefono:"/>
+		                		<p:inputText id="telefono" value="#{estudianteBean.telefono}" required="true" />
+		                    </div>	
+		                    <div class="field">
+		                        <h:outputLabel for="correo" value="Correo:"/>
+		                		<p:inputText id="correo" value="#{estudianteBean.email}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <h:outputLabel for="fecha_nacimiento" value="Fecha nacimiento:"/>
+		                		<p:calendar id="fecha_nacimiento" value="#{estudianteBean.fecha_nacimiento}" showButtonPanel="true" required="true" pattern="dd/MM/yyyy" />
+		                    </div>		
+			                </p:outputPanel>
+			            </p:outputPanel>
+			
+			            <f:facet name="footer">
+			                <p:commandButton value="Save" icon="pi pi-check" actionListener="#{estudianteBean.register}"
+			                    update="new-estudiante-content" process="new-estudiante-content @this" />
+			                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('newEstudianteDialog').hide()"
+			                    class="ui-button-secondary" type="button" />
+			            </f:facet>
+			        </p:dialog>
+				</h:form>
+				<!-- *************************** FIN nuevo estudiante **************************************  -->
+		</div>
+	
+	</p:outputPanel>
+	
+	</div>
+</h:body>
+
+</html>

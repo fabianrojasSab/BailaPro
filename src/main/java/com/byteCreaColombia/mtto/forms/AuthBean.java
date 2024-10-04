@@ -2,6 +2,7 @@ package com.byteCreaColombia.mtto.forms;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import com.byteCreaColombia.mtto.entities.Usuario;
@@ -23,7 +24,13 @@ public class AuthBean {
 	private String email;
 	
 	private String contrasena;
+
+	@ManagedProperty("#{usuarioSesion}")
+    private SessionBean usuarioSesion;
 	
+    public void setUsuarioSesion(SessionBean usuarioSesion) {
+        this.usuarioSesion = usuarioSesion;
+    }
 	
 	public long getId() {
 		return id;
@@ -62,7 +69,8 @@ public class AuthBean {
 		Usuario usuario = usuarioServices.encontrarUsuarioLogin(nombre, contrasena);
 		
 		if (usuario != null) {
-			//asigna el primer usuario (si existe) a usuarioDto
+            usuarioSesion.setNombreUsuario(usuario.getNombre());
+            usuarioSesion.setAutenticado(true);
 			return "paginaPrincipal";
 		}else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Nombre de usuario o contraseña incorrecto"));

@@ -4,7 +4,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import com.byteCreaColombia.mtto.entities.Usuario;
 
 @WebListener
 public class AppStartupListener implements ServletContextListener {
